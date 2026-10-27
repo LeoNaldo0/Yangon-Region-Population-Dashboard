@@ -1,0 +1,21 @@
+{
+  "snapshotDate": "2026-10-05",
+  "generatedDate": "2026-10-06",
+  "scope": "Yangon Region (OpenStreetMap/HDX adm1_pcode MMR013)",
+  "counts": {
+    "schools": 1188,
+    "otherEducation": 249,
+    "hospitals": 289,
+    "clinics": 452,
+    "pharmacies": 317,
+    "doctorsAndDentists": 112,
+    "otherHealth": 22
+  },
+  "methodology": "Counts are distinct OpenStreetMap element records in the HOT/HDX Myanmar GeoJSON exports, assigned to Yangon Region by adm1_pcode MMR013. Education categories use amenity or building tags; health categories use amenity or healthcare tags. Other education combines kindergartens (31), colleges (46), universities (171), and libraries (1). Other health includes mapped laboratory, alternative, generic healthcare=yes, optometrist, hospice, physiotherapist, psychotherapist, community health worker, and other less common healthcare-tagged features.",
+  "limitations": "OpenStreetMap is community-mapped and incomplete. These are mapped features, not an official inventory of establishments; separate point and polygon objects may represent the same site. Counts should not be interpreted as comprehensive facility totals.",
+  "sources": {
+    "education": "https://data.humdata.org/dataset/hotosm_mmr_education_facilities",
+    "health": "https://data.humdata.org/dataset/hotosm_mmr_health_facilities",
+    "openStreetMap": "https://www.openstreetmap.org/copyright"
+  }
+}

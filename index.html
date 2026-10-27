@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yangon Region Population Dashboard</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Project CSS -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-theme="dark">
+
+  <a class="skip-link" href="#map-section">Skip to dashboard</a>
+
+  <nav class="navbar">
+    <div class="nav-left">
+      <a href="index.html" class="brand" aria-label="Yangon Region dashboard home">
+        <span class="brand-mark" aria-hidden="true">Y</span>
+        <span>Yangon <span class="brand-light">Region</span></span>
+      </a>
+    </div>
+    <div class="nav-right">
+      <button id="theme-toggle" class="btn-icon" aria-label="Switch to light theme">☀️</button>
+      <button id="menu-toggle" class="btn-icon menu-btn" aria-label="Open menu" aria-expanded="false">☰</button>
+    </div>
+  </nav>
+
+  <div id="mobile-menu" class="mobile-menu hidden">
+    <a href="#summary-section">Summary Statistics</a>
+    <a href="#map-section">Map & Charts</a>
+  </div>
+
+  <header class="dashboard-title">
+    <div class="hero-copy">
+      <span class="eyebrow"><span class="eyebrow-dot"></span> MYANMAR · REGIONAL PROFILE</span>
+      <h1>Yangon Region <span>Population Dashboard</span></h1>
+      <p class="description">
+        Explore population distribution and gender demographics across Yangon’s townships.
+        Census figures are from 2014.
+      </p>
+    </div>
+    <div class="hero-meta" aria-label="Dashboard coverage and data year">
+      <span class="meta-label">COVERAGE</span>
+      <strong>Yangon Region, Myanmar</strong>
+      <span class="meta-divider"></span>
+      <span class="meta-label">CENSUS YEAR</span>
+      <strong>2014</strong>
+    </div>
+  </header>
+
+  <main id="map-section" class="dashboard-main">
+    <section class="map-column">
+      <div class="map-panel">
+        <div class="panel-header">
+          <div class="panel-heading">
+            <span class="section-kicker">INTERACTIVE MAP</span>
+            <h2>Total Population by Township</h2>
+            <p class="panel-caption">Select a township to view its population profile.</p>
+          </div>
+          <label class="metric-control">
+            <span>MAP METRIC</span>
+            <select id="metric-select" class="metric-select" aria-label="Choose population metric">
+              <option value="total">Total Population</option>
+              <option value="male">Male Population</option>
+              <option value="female">Female Population</option>
+            </select>
+          </label>
+        </div>
+        <div id="map" aria-label="Yangon Region township population choropleth map"></div>
+        <div class="map-legend-wrap">
+          <div class="legend-heading">
+            <span>POPULATION SCALE</span>
+            <span id="township-count" class="coverage-count">Loading townships…</span>
+          </div>
+          <div id="map-legend" class="map-legend"></div>
+        </div>
+      </div>
+      <section id="township-comparison" class="map-panel township-comparison hidden">
+        <div class="panel-heading">
+          <span class="section-kicker">TOWNSHIP COMPARISON</span>
+          <h2>Population by Township</h2>
+        </div>
+        <div class="chart-container">
+          <canvas id="comparisonChart"></canvas>
+        </div>
+      </section>
+    </section>
+
+    <aside class="charts-column">
+      <section id="summary-section" class="summary-section">
+        <div class="summary-heading">
+          <div>
+            <span class="section-kicker">REGIONAL OVERVIEW</span>
+            <h2>Yangon Region Summary</h2>
+          </div>
+          <span class="summary-icon" aria-hidden="true">YR</span>
+        </div>
+        <div class="summary-cards">
+          <div class="summary-card">
+            <span class="summary-icon" aria-hidden="true">ED</span>
+            <span class="summary-label">Mapped schools</span>
+            <span id="facility-schools" class="summary-value">Unavailable</span>
+          </div>
+          <div class="summary-card">
+            <span class="summary-icon" aria-hidden="true">H+</span>
+            <span class="summary-label">Mapped hospitals</span>
+            <span id="facility-hospitals" class="summary-value">Unavailable</span>
+          </div>
+          <div class="summary-card">
+            <span class="summary-icon" aria-hidden="true">CL</span>
+            <span class="summary-label">Mapped clinics</span>
+            <span id="facility-clinics" class="summary-value">Unavailable</span>
+          </div>
+          <div class="summary-card">
+            <span class="summary-icon" aria-hidden="true">ED+</span>
+            <span class="summary-label">Other education facilities</span>
+            <span id="facility-otherEducation" class="summary-value">Unavailable</span>
+          </div>
+          <div class="summary-card">
+            <span class="summary-icon" aria-hidden="true">PH</span>
+            <span class="summary-label">Mapped pharmacies</span>
+            <span id="facility-pharmacies" class="summary-value">Unavailable</span>
+          </div>
+          <div class="summary-card">
+            <span class="summary-icon" aria-hidden="true">MD</span>
+            <span class="summary-label">Mapped doctors and dentists</span>
+            <span id="facility-doctorsAndDentists" class="summary-value">Unavailable</span>
+          </div>
+          <div class="summary-card">
+            <span class="summary-icon" aria-hidden="true">+</span>
+            <span class="summary-label">Other mapped health services</span>
+            <span id="facility-otherHealth" class="summary-value">Unavailable</span>
+          </div>
+        </div>
+      </section>
+
+      <div id="township-details" class="township-details hidden">
+        <div class="detail-heading">
+          <div>
+            <span class="section-kicker">TOWNSHIP PROFILE</span>
+            <h2 id="selected-township-name">—</h2>
+          </div>
+          <span class="detail-indicator" aria-hidden="true"></span>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-card">
+            <span class="stat-label">Total Population</span>
+            <span id="stat-total" class="stat-value">—</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Male</span>
+            <span id="stat-male" class="stat-value">—</span>
+            <span id="stat-male-pct" class="stat-pct">—</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Female</span>
+            <span id="stat-female" class="stat-value">—</span>
+            <span id="stat-female-pct" class="stat-pct">—</span>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="genderBarChart"></canvas>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="brand-mark" aria-hidden="true">Y</span>
+        <div>
+          <strong>Yangon Region Dashboard</strong>
+          <span>Population profile · Census 2014</span>
+        </div>
+      </div>
+      <div class="footer-sources">
+        <span class="footer-label">DATA, BOUNDARY & FACILITY REFERENCES</span>
+        <div class="source-links">
+          <a href="https://myanmar.unfpa.org/en/publications/2014-census-township-reports" target="_blank" rel="noopener noreferrer">
+            UNFPA Township Reports
+          </a>
+          <a href="https://themimu.info/census-data" target="_blank" rel="noopener noreferrer">
+            MIMU Census Data
+          </a>
+          <a href="https://data.opendevelopmentcambodia.net/en/dataset/2014-myanmar-census" target="_blank" rel="noopener noreferrer">
+            Township population dataset
+          </a>
+          <a href="https://data.humdata.org/dataset/hotosm_mmr_education_facilities" target="_blank" rel="noopener noreferrer">
+            HOT/HDX Myanmar education facilities (OSM)
+          </a>
+          <a href="https://data.humdata.org/dataset/hotosm_mmr_health_facilities" target="_blank" rel="noopener noreferrer">
+            HOT/HDX Myanmar health facilities (OSM)
+          </a>
+          <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">
+            OpenStreetMap contributors (ODbL)
+          </a>
+          <a href="https://www.moe.gov.mm/" target="_blank" rel="noopener noreferrer">
+            Ministry of Education reference
+          </a>
+          <a href="https://www.who.int/countries/mmr" target="_blank" rel="noopener noreferrer">
+            WHO Myanmar health reference
+          </a>
+          <a href="https://www.geoboundaries.org/api/current/gbOpen/MMR/ADM3/" target="_blank" rel="noopener noreferrer">
+            geoBoundaries (CC BY 4.0)
+          </a>
+        </div>
+      </div>
+    </div>
+    <p class="disclaimer">
+      Disclaimer: Population figures reflect the cited 2014 census period and may not
+      represent current population estimates. This project is not affiliated with any
+      government department.
+    </p>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="data.js"></script>
+  <script src="charts.js"></script>
+  <script src="map.js"></script>
+  <script src="theme.js"></script>
+  <script src="facilities.js"></script>
+</body>
+</html>
